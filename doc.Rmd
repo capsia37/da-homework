@@ -1,0 +1,26 @@
+---
+title: "Homework DA"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Compito di Data Analytics
+
+Gruppo C: ZANNI, JIMÉNEZ LIRIANO, RICCIO, SMOKOVIĆ
+
+## Importazione dei dati
+
+```{r}
+BankChurners = read.csv("credit-card-customers/BankChurners.csv", stringsAsFactors = T)
+HousePrices = read.csv("house-prices/train.csv", stringsAsFactors = T)
+```
+
+## Riepilogo dei contenuti
+
+```{r}
+summary(BankChurners)
+```
