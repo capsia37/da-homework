@@ -24,3 +24,159 @@ HousePrices = read.csv("house-prices/train.csv", stringsAsFactors = T)
 ```{r}
 summary(BankChurners)
 ```
+# ANALISI DEL DATASET "BankChurners"
+BankChurners <- read.csv("BankChurners.csv")
+
+str(BankChurners)
+head(BankChurners)
+summary(BankChurners)
+
+# PER LE VARIABILI DI TIPO QUANTITATIVE(integer/numeric)
+
+# Customer_age
+eta_media <- mean(BankChurners$Customer_Age) # eta media dei clienti
+round(eta_media, digits = 1) # arrotondando a una cifra decimale
+
+sd(BankChurners$Customer_Age) # deviazione standard
+quantile(BankChurners$Customer_Age) # quantili
+# notiamo che l'eta dei clienti sta nell'intervallo dai 26 ai 73 anni
+# con 26 anni il cliente piu giovane e 73 il piu anziano
+summary(BankChurners$Customer_Age) # e lo possiamo notare anche in questo modo
+
+# visualizzazione grafica
+hist(BankChurners$Customer_Age, main = "Istogramma delle eta", xlab = "Eta", ylab = "Frequenza")
+
+boxplot(BankChurners$Customer_Age, main = "Boxplot delle eta", ylab = "Frequenza")
+
+
+# Dependent_count
+summary(BankChurners$Dependent_count) #abbiamo da 0 a 5 dipendenti assegnati
+round(mean(BankChurners$Dependent_count), digits = 1) #media
+median(BankChurners$Dependent_count) #mediana
+sd(BankChurners$Dependent_count) #deviazione standard
+
+#visualizzazione grafica
+hist(BankChurners$Dependent_count, main="Istogramma di Dependent Count", xlab="Numero di Dipendenti", 
+ylab="Frequenza", breaks=6, col="lightblue")
+
+# notiamo che la maggioranza dei clienti possiede dai 2 ai 3 dipendenti associati
+
+# controllando i numeri:
+table(BankChurners$Dependent_count)
+
+# aggiungendo la retta della media delle frequenze:
+media_dip <- mean(table(BankChurners$Dependent_count))
+abline(h = media_dip, col = "red", lwd = 2)
+legend("topright", legend = paste("Media =", round(media_dip, 2)), 
+       col = "red", lwd = 2, bty = "n")
+
+
+# Credit_Limit
+summary(BankChurners$Credit_Limit) # limite del credito che va da 1.4k a 34k
+media_credito <- round(mean(BankChurners$Credit_Limit), digits = 0) # credito limite medio
+
+# visualizzazione grafica:
+hist(BankChurners$Credit_Limit, pch = 20)
+abline(h= media_credito, col = "red", lwd = 2)
+legend("topright", legend = paste("Media =", media_credito), 
+       col = "red", lwd = 2, bty = "n")
+
+# notiamo che il grafico e' piu' popolato ovvero ci sono piu' clienti al di sotto della media
+# sono piu' numerosi i clienti con credito limite massimo (34k) che i clienti nei vari intervalli tra 10k e 33k
+
+# Avg_Open_To_Buy
+summary(BankChurners$Avg_Open_To_Buy)
+hist(BankChurners$Avg_Open_To_Buy, main = "Istogramma", xlab = "Media Compera", ylab = "Frequenza")
+
+# notiamo che i valori massimi sono esattamente il credito limite dei clienti
+# il grafico segue un andamento esponenziale verso il basso
+# e' molto simile al grafico visto in precedenza riguardante il credito limite
+# quindi da questi grafici si nota come praticamenti tutti i clienti raggiungano o quasi il credito limite
+
+#Month_On_Book
+summary(BankChurners$Months_on_book) #il tempo minimo trascorso con la banca e' di 13 mesi invece il
+# maggior tempo trascorso e' di 56 mesi
+# vedendolo graficamente:
+hist(BankChurners$Months_on_book, main = "Istogramma mesi trascorsi", xlab = "Mesi", ylab = "Frequenza")
+media_mesi <- mean(BankChurners$Months_on_book)
+abline(v= media_mesi, col = "blue", lwd = 3)
+legend("topright", legend = paste("Media =", round(media_mesi, digits = 0)), 
+       col = "blue", lwd = 2, bty = "n")
+
+# osserviamo che poche persone restano poco o tanto 
+# la maggior parte dei clienti resta con la banca tra i 35 e i 40 mesi
+
+#Total_Trans_Amt
+summary(BankChurners$Total_Trans_Amt) # transazioni minime e massime negli ultimi 12 mesi
+# minima di 510 dollari
+# la massima e' di 18k dollari
+
+# grafico:
+hist(BankChurners$Total_Trans_Amt, main = "Istogramma delle transazioni per 12 mesi", xlab = "Mesi",
+     ylab = "Frequenza")
+
+# si nota che la maggioranza si tiene sotto i 5k dollari di spesa
+# aggiungendo la media:
+media_transazioni <- mean(BankChurners$Total_Trans_Amt)
+abline(v= media_transazioni, col = "orange", lwd = 3)
+legend("topright", legend = paste("Media =", round(media_transazioni, digits = 0)), 
+       col = "orange", lwd = 2, bty = "n")
+
+# come detto poco fa una volta superata la media delle transazioni la frequenza delle persone si abbassa
+
+
+
+# PER LE VARIABILI DI TIPO CATEGORIALE(factor)
+# sesso
+BankChurners$Gender <- factor(BankChurners$Gender) # converto in un fattore per fare l'analisi
+levels(BankChurners$Gender)
+str(BankChurners$Gender)
+
+# per calcolare la frequenza assoluta
+table(BankChurners$Gender)
+# marginale
+prop.table(table(BankChurners$Gender))
+
+# Grafico a barre
+barplot(table(BankChurners$Gender), main="Grafico a barre variabile sesso", xlab="Categoria", ylab="Frequenza")
+
+
+# Education_Level
+BankChurners$Education_Level <- factor(BankChurners$Education_Level) # conversione in fattore
+summary(BankChurners$Education_Level)
+str(BankChurners$Education_Level)
+barplot(table(BankChurners$Education_Level), main = "Grafico a barre livello educazione", xlab = "Educazione",
+        ylab = "Frequenza")
+
+
+#Marital_Status
+BankChurners$Marital_Status <- factor(BankChurners$Marital_Status)
+str(BankChurners$Marital_Status) # ho 4 livelli(divorziato, sposato, single e stato sconosciuto)
+summary(BankChurners$Marital_Status)
+
+barplot(table(BankChurners$Marital_Status), main= "Grafico a barre", xlab="Categoria", ylab="Frequenza")
+# la maggioranza delle persone e' sposata oppure single
+# distribuendo gli stati sconosciuti il risultato sarebbe sempre lo stesso
+
+round(prop.table(table(BankChurners$Marital_Status)), digits = 3)
+# il 46% delle persone e' sposato
+# il 38% e' single
+# il 16% altro
+
+# Income_Category
+BankChurners$Income_Category <- factor(BankChurners$Income_Category)
+summary(BankChurners$Income_Category)
+str(BankChurners$Income_Category)
+
+# frequenze:
+table(BankChurners$Income_Category) # stesso output di summary
+prop.table(table(BankChurners$Income_Category))
+
+# Card_Category
+BankChurners$Card_Category <- factor(BankChurners$Card_Category)
+str(BankChurners$Card_Category)
+summary(BankChurners$Card_Category)
+
+barplot(table(BankChurners$Card_Category), main = "Grafico per la categoria delle carte", xlab = "Tipo di carta", 
+     ylab = "Frequenza")
+# notiamo che la carta di credito di tipo Blue e' nettamente la piu' presente
