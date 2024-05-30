@@ -31,6 +31,8 @@ str(BankChurners)
 head(BankChurners)
 summary(BankChurners)
 
+sum(is.na(BankChurners))
+
 # PER LE VARIABILI DI TIPO QUANTITATIVE(integer/numeric)
 
 # Customer_age
