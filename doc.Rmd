@@ -57,7 +57,7 @@ sd(BankChurners$Dependent_count) #deviazione standard
 
 #visualizzazione grafica
 hist(BankChurners$Dependent_count, main="Istogramma di Dependent Count", xlab="Numero di Dipendenti", 
-ylab="Frequenza", breaks=6, col="lightblue")
+ylab="Frequenza", breaks=8, col="lightblue")
 
 # notiamo che la maggioranza dei clienti possiede dai 2 ai 3 dipendenti associati
 
@@ -76,8 +76,8 @@ summary(BankChurners$Credit_Limit) # limite del credito che va da 1.4k a 34k
 media_credito <- round(mean(BankChurners$Credit_Limit), digits = 0) # credito limite medio
 
 # visualizzazione grafica:
-hist(BankChurners$Credit_Limit, pch = 20)
-abline(h= media_credito, col = "red", lwd = 2)
+hist(BankChurners$Credit_Limit)
+abline(v= media_credito, col = "red", lwd = 2)
 legend("topright", legend = paste("Media =", media_credito), 
        col = "red", lwd = 2, bty = "n")
 
