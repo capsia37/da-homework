@@ -558,3 +558,42 @@ I prezzi di vendità delle case sono nel range tra 34900 e 755000 con una media 
 boxplot(log(HousePrices$SalePrice)~HousePrices$LotShape)
 table(HousePrices$LotShape)
 ```
+
+prezzo <-subset(data,select = c( credit limit,MSSubClass,BsmtFullBath,BsmtHalfBath 
+                                fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars))
+
+
+
+
+prezzo$"creditlimit" <- as.numeric(prezzo$"creditlimit")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+ prezzo$"MSSubClass" <- factor(prezzo$"creditlimit")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza") 
+prezzo$"BsmtFullBath" <- as.numeric(prezzo$"BsmtFullBath")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"BsmtHalfBath" <- as.numeric(prezzo$"BsmtHalfBath")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"HalfBath" <- as.numeric(prezzo$"HalfBath")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"BedroomAbvGr" <- as.numeric(prezzo$"BedroomAbvGr")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"KitchenAbvGr" <- as.numeric(prezzo$"KitchenAbvGr")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"Fireplaces" <- as.numeric(prezzo$"Fireplaces")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"GarageCars" <- as.numeric(prezzo$"GarageCars")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+prezzo$"fullBath" <- as.numeric(prezzo$" fullBath")
+                              levels= c(1,2,3)
+                              labels= c("abbastanza","non abbastanza")
+#Prova de Anova
+Variable_limitate <-subset(Data, select =credit limit,MSSubClass,BsmtFullBath,BsmtHalfBath,fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars
