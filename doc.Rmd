@@ -596,4 +596,26 @@ prezzo$"fullBath" <- as.numeric(prezzo$" fullBath")
                               levels= c(1,2,3)
                               labels= c("abbastanza","non abbastanza")
 #Prova de Anova
-Variable_limitate <-subset(Data, select =credit limit,MSSubClass,BsmtFullBath,BsmtHalfBath,fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars
+Variable_limitate <-subset(Data, select = creditlimit,MSSubClass,BsmtFullBath,BsmtHalfBath,fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars)
+
+prezzo$Housemeters <- rnorm(4986,mean=828,sd=708)
+Housemeters <- prezzo$Housemeters
+#variable description
+tapply(prezzo$housemeters, Houseprice$Saleprice, summary)
+
+#separazione della variabile ordinaria
+prezzo <- prezzo[!is.na(Houseprices$Salesprices),]
+Housemeters <-as.factor(Houseprices$Salesprices)
+#Retta di Regresione
+p <- c(1)
+h <- c(2)
+DATA <- data.frame(p, h)
+model <- lm(h ~ p, data = DATA)
+
+#Argomento
+plot(p, h, main= "House prices", plab= "p", hlab = "h")
+abline(a= acoefficients[1], b = acoefficients[2])
+
+
+
+ 
