@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 ---
 
 ```{r setup, include=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -184,374 +185,63 @@ barplot(table(BankChurners$Card_Category), main = "Grafico per la categoria dell
 ## ANALISI DEL DATASET "HousePrices"
 
 ```{r}
-HousePrices$MSSubClass <- factor(HousePrices$MSSubClass)
-HousePrices$BsmtFullBath <- factor(HousePrices$BsmtFullBath)
-HousePrices$BsmtHalfBath <- factor(HousePrices$BsmtHalfBath)
-HousePrices$FullBath <- factor(HousePrices$FullBath)
-HousePrices$HalfBath <- factor(HousePrices$HalfBath)
-HousePrices$BedroomAbvGr <- factor(HousePrices$BedroomAbvGr)
-HousePrices$KitchenAbvGr <- factor(HousePrices$KitchenAbvGr)
-HousePrices$Fireplaces <- factor(HousePrices$Fireplaces)
-HousePrices$GarageCars <- factor(HousePrices$GarageCars)
+HousePricesUnivConf <- read.csv("houseprices-univ.config.csv")
 ```
 
-```{r}
-univarQual <- function(dfcol) {
-  barplot(table(HousePrices[, dfcol[1]]), main=dfcol[1])
-  print(table(HousePrices[, dfcol[1]]))
-  cat("\n", dfcol[2], "\n")
+```{r, results='asis'}
+univarAnalysis <- function(conf, df) {
+  cat("\n\n##", conf["colname"], "\n")
+  if (as.logical(conf["uselog"])) {
+    df[, conf["colname"]] <- log(df[, conf["colname"]])
+  }
+  cat("\n\n Numero di NA: ", sum(is.na(df[, conf["colname"]]), na.rm = T), "\n\n")
+  if (as.logical(conf["filterzeros"])) {
+    cat("\n\n Numero di zeri rimossi: ", sum(df[, conf["colname"]] == 0, na.rm = T), "\n\n")
+    df <- df[df[, conf["colname"]] != 0,]
+  }
+  if (sum(
+      as.logical(conf["dobarplot"]), 
+      as.logical(conf["doboxplot"]),
+      as.logical(conf["dohist"]),
+      as.logical(conf["dodensity"]),
+      as.logical(conf["doqqplot"])
+    ) > 2) {
+    par(mfrow = c(2, 2))
+  } else {
+    par(mfrow = c(1, 1))
+  }
+  if (as.logical(conf["dotable"])) {
+    print(kable(t(rbind(
+      idx = levels(factor(df[, conf["colname"]])),
+      abs = table(df[, conf["colname"]]),
+      rel = prop.table(table(df[, conf["colname"]]))
+    )), col.names = c("Level", "Abs. Freq", "Rel. Freq"), row.names = FALSE))
+  } else {
+    print(kable(as.array(summary(df[, conf["colname"]])), col.names = c("Stat", "Value")))
+  }
+  if (as.logical(conf["dobarplot"])) {  
+    barplot(table(df[, conf["colname"]]), main=NULL)
+  }
+  if (as.logical(conf["doboxplot"])) {
+    boxplot(df[, conf["colname"]], main=NULL)
+  }
+  if (as.logical(conf["dohist"])) {
+    hist(df[, conf["colname"]], freq = F, main=NULL, xlab = NULL)
+  }
+  if (as.logical(conf["dodensity"])) {
+    plot(density(df[, conf["colname"]], na.rm = T), main="")
+  }
+  if (as.logical(conf["doqqplot"])) {
+    qqnorm(df[, conf["colname"]])
+    qqline(df[, conf["colname"]])
+  }
+  if (!is.na(conf["desc"])) {
+    cat("\n\n", conf["desc"], "\n")
+  }
 }
+
+out <- apply(HousePricesUnivConf, 1, univarAnalysis, df = HousePrices)
 ```
-
-```{r, include=FALSE}
-qualVarDesc <- cbind.data.frame(colnames(Filter(is.factor,HousePrices)), c(
-  "Le case più frequenti sono a 1 o 2 piani successive al 1946",
-  "Le case nel dataset sono prevalentemente in zone residenziali a bassa e media densità",
-  "Solo 6 delle case hanno un accesso non asfaltato sulla strada",
-  "Le case generalmente non hanno un vialetto, tra quelle in cui c'è per metà sono asfaltati",
-  "La maggior parte delle proprietà nel dataset sono regolari o presentano lievi irregolarità nella forma",
-  "Prevalgono le case costruite in piano",
-  "Hanno tutte i servizi essenziali, tranne una",
-  "I terreni interni e in angolo sono più frequenti",
-  "La pendenza del suolo nelle proprietà è lieve nella maggior parte dei casi",
-  "I quartieri più scelti sono North Ames, College Creek e Old Town",
-  "La maggior parte delle case non ha stazioni, arterie o strade di collegamento adiacenti",
-  "Molto simile al grafico precedente",
-  "Sono quasi tutte unifamiliari, seguono le villette a schiera",
-  "Le case sono prevalentemente a un piano o a due piani",
-  "I tetti sono a capanna o a falde",
-  "Le coperture sono in tegole standard",
-  "",
-  "",
-  "I rivestimenti spesso non sono presenti, qualora fossero presenti sono spesso in mattone e più raramente in pietra",
-  "La qualità dei materiali esterni viene generalmente considerata nella media o buona",
-  "Le condizioni dei materiali esterni sono nella media o buone, ma raramente anche decenti",
-  "Le fondamenta sono in calcestruzzo o cemento",
-  "Qualità del seminterrato buona o nella media",
-  "Condizioni del seminterrato nella media",
-  "Il seminterrato raramente può essere esposto ma generalmente non lo è",
-  "I rating del seminterrato sono disomogenei",
-  "Il secondo seminterrato non è completato",
-  "Riscaldamento con gas ad aria calda",
-  "Qualità riscaldamento eccellente, seguita da nella media e da buona",
-  "Riscaldamento centralizzato presente",
-  "Interruttori elettrici standard",
-  "Le case non hanno bagni completi nel seminterrato o ne hanno uno solo",
-  "Non hanno mezzi bagni nel seminterrato",
-  "Hanno uno o due bagni completi in casa",
-  "Hanno uno o nessun mezzo bagno in casa",
-  "Hanno generalmente tra 2 e 4 stanze da letto",
-  "Le case hanno solitamente una sola cucina",
-  "Qualità della cucina nella media o buona",
-  "La casa è funzionale non danneggiata",
-  "Raramente c'è più di un camino in casa",
-  "Qualità dei camini, buona o nella media",
-  "Garage annessi o indipendenti",
-  "Molti dei garage non sono finiti, altri sono finiti in uno stato grezzo, altri ancora sono finiti",
-  "La capienza dei garage contiene 2 auto o meno frequentemente 1 sola",
-  "Qualità del garage nella media",
-  "Condizioni del garage nella media",
-  "Strada del garage asfaltata",
-  "Qualità piscina equamente distribuita tra eccellente, buona e decente",
-  "Il confine offre un minimo di privacy",
-  "Generalmente non sono presenti altre strutture, avvolte sono presenti capannoni",
-  "Vendita con atto di garanzia convenzionale",
-  "Condizioni di vendita generalmente normali"
-))
-
-names(qualVarDesc) <- c("var", "desc")
-```
-
-```{r}
-apply(qualVarDesc, 1, univarQual)
-```
-
-```{r}
-summary(HousePrices$LotFrontage)
-boxplot(HousePrices$LotFrontage)
-hist(HousePrices$LotFrontage, freq = F)
-plot(density(HousePrices$LotFrontage, na.rm = T))
-qqnorm(HousePrices$LotFrontage)
-qqline(HousePrices$LotFrontage)
-```
-
-La distribuzione non è normale nelle code. Il boxplot evidenzia che i valori sono solitamente nell'intervallo tra 50 e 100 piedi lineari, spesso possono raggiungere fino ai 200 piedi lineari. Inoltre è presente un outlier superiore a 300 piedi lineari. Confrontando il primo e il terzo quartile si nota che la distribuzione è solo lievemente asimmetrica.
-
-```{r}
-summary(HousePrices$LotArea)
-boxplot(log(HousePrices$LotArea))
-hist(log(HousePrices$LotArea), freq=F)
-plot(density(log(HousePrices$LotArea), na.rm = T))
-qqnorm(HousePrices$LotArea)
-qqline(HousePrices$LotArea)
-qqnorm(log(HousePrices$LotArea))
-qqline(log(HousePrices$LotArea))
-```
-
-La distribuzione non è normale nelle code, non lo è neanche il suo logaritmo. La media si attesta intorno ai 10500 piedi quadrati e dai quartili si nota che è asimmetrica.
-
-```{r}
-summary(HousePrices$OverallQual)
-table(HousePrices$OverallQual)
-boxplot(HousePrices$OverallQual)
-hist(HousePrices$OverallQual)
-```
-
-La maggior parte delle case è valutata con una qualità tra 5 e 7 decimi
-
-```{r}
-summary(HousePrices$OverallCond)
-table(HousePrices$OverallCond)
-boxplot(HousePrices$OverallCond)
-hist(HousePrices$OverallCond)
-```
-
-La valutazione delle condizioni solitamente è 5/10 e varia generalmente tra 4 e 7 decimi con alcuni outlier
-
-```{r}
-summary(HousePrices$YearBuilt)
-boxplot(HousePrices$YearBuilt)
-hist(HousePrices$YearBuilt, freq = F)
-plot(density(HousePrices$YearBuilt, na.rm = T))
-```
-
-Dal grafico della densità si nota che la distribuzione dei dati ha 3 mode, quindi si evidenziano periodi in cui venivano costruite molte case seguiti da periodi in cui la costruzione di case diminuisce significativamente. Dal boxplot notiamo che la maggior parte delle case è costruita tra il 1954 e il 2000 con alcuni outlier di costruzione antecedente.
-
-```{r}
-summary(HousePrices$YearRemodAdd)
-boxplot(HousePrices$YearRemodAdd)
-hist(HousePrices$YearRemodAdd, freq = F)
-plot(density(HousePrices$YearRemodAdd, na.rm = T))
-```
-
-La data dell'ultima ristrutturazione è solitamente recente: tra il 1967 e il 2004, ma c'è anche una grande quantità di edifici che non sono stati ristrutturati dopo gli anni 50'.
-
-```{r}
-sum(HousePrices$MasVnrArea == 0, na.rm = T)
-summary(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0])
-boxplot(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0])
-hist(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0], freq = F)
-plot(density(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0], na.rm = T))
-qqnorm(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0])
-qqline(HousePrices$MasVnrArea[HousePrices$MasVnrArea != 0])
-```
-
-Notiamo che 861 case non hanno rivestimenti dei muri e quindi possiamo non analizzarne la superficie. Escludendo queste notiamo che comunque prevalgono superfici con rivestimenti basse tra i 113 e i 330 piedi quadrati.
-
-```{r}
-sum(HousePrices$BsmtFinSF1 == 0, na.rm = T)
-summary(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0])
-boxplot(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0])
-hist(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0], freq = F)
-plot(density(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0], na.rm = T))
-qqnorm(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0])
-qqline(HousePrices$BsmtFinSF1[HousePrices$BsmtFinSF1 != 0])
-```
-
-Escludiamo come nel caso precedente dall'analisi della superficie dei seminterrati i valori di superficie pari a 0. Notiamo che le superfici dei seminterrati con la categoria di utilizzo definita in BsmtFinType1 sono distribuiti tra 371 e 867 piedi quadrati con un outlier massimo di 5644 piedi quadrati.
-
-```{r}
-sum(HousePrices$BsmtFinSF2 == 0, na.rm = T)
-summary(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0])
-boxplot(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0])
-hist(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0], freq = F)
-plot(density(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0], na.rm = T))
-qqnorm(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0])
-qqline(HousePrices$BsmtFinSF2[HousePrices$BsmtFinSF2 != 0])
-```
-
-Per il secondo seminterrato notiamo che ci sono ancora più valori nulli e i valori si abbassano notevolmente rispetto alla precedente analisi con primo e terzo quartile 178 e 551.
-
-```{r}
-sum(HousePrices$BsmtUnfSF == 0, na.rm = T)
-summary(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0])
-boxplot(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0])
-hist(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0], freq = F)
-plot(density(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0], na.rm = T))
-qqnorm(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0])
-qqline(HousePrices$BsmtUnfSF[HousePrices$BsmtUnfSF != 0])
-```
-
-Sono molto più frequenti i seminterrati non finiti, per le superfici di questi continua a valere l'analisi di BsmtFinSF1.
-
-```{r}
-sum(HousePrices$TotalBsmtSF == 0, na.rm = T)
-summary(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0])
-boxplot(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0])
-hist(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0], freq = F)
-plot(density(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0], na.rm = T))
-qqnorm(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0])
-qqline(HousePrices$TotalBsmtSF[HousePrices$TotalBsmtSF != 0])
-```
-
-Le superfici totali dei seminterrati sono tra 810 e 1310 piedi quadrati.
-
-```{r}
-summary(HousePrices$X1stFlrSF)
-boxplot(HousePrices$X1stFlrSF)
-hist(HousePrices$X1stFlrSF, freq = F)
-plot(density(HousePrices$X1stFlrSF, na.rm = T))
-qqnorm(HousePrices$X1stFlrSF)
-qqline(HousePrices$X1stFlrSF)
-```
-
-```{r}
-sum(HousePrices$X2ndFlrSF == 0, na.rm = T)
-summary(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0])
-boxplot(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0])
-hist(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0], freq = F)
-plot(density(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0], na.rm = T))
-qqnorm(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0])
-qqline(HousePrices$X2ndFlrSF[HousePrices$X2ndFlrSF != 0])
-```
-
-```{r}
-sum(HousePrices$LowQualFinSF == 0, na.rm = T)
-summary(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0])
-boxplot(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0])
-hist(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0], freq = F)
-plot(density(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0], na.rm = T))
-qqnorm(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0])
-qqline(HousePrices$LowQualFinSF[HousePrices$LowQualFinSF != 0])
-```
-
-La maggior parte delle case non hanno finiture di bassa qualità. In quelle che c'è la superficie varia principalmente tra 168 e 477 piedi quadrati. Notiamo inoltre che la distribuzione è bimodale.
-
-```{r}
-summary(HousePrices$GrLivArea)
-boxplot(HousePrices$GrLivArea)
-hist(HousePrices$GrLivArea, freq = F)
-plot(density(HousePrices$GrLivArea, na.rm = T))
-qqnorm(HousePrices$GrLivArea)
-qqline(HousePrices$GrLivArea)
-```
-
-```{r}
-summary(HousePrices$TotRmsAbvGrd)
-table(HousePrices$TotRmsAbvGrd)
-boxplot(HousePrices$TotRmsAbvGrd)
-hist(HousePrices$TotRmsAbvGrd)
-```
-```{r}
-summary(HousePrices$GarageYrBlt)
-boxplot(HousePrices$GarageYrBlt)
-hist(HousePrices$GarageYrBlt, freq = F)
-plot(density(HousePrices$GarageYrBlt, na.rm = T))
-```
-
-Si evidenzia anche negli anni di costruzione dei garage una distribuzione a più mode. I garage sono soprattutto di costruzione recente con un picco di costruzioni negli anni 2000.
-
-```{r}
-sum(HousePrices$GarageArea == 0, na.rm = T)
-summary(HousePrices$GarageArea[HousePrices$GarageArea != 0])
-boxplot(HousePrices$GarageArea[HousePrices$GarageArea != 0])
-hist(HousePrices$GarageArea[HousePrices$GarageArea != 0], freq = F)
-plot(density(HousePrices$GarageArea[HousePrices$GarageArea != 0], na.rm = T))
-qqnorm(HousePrices$GarageArea[HousePrices$GarageArea != 0])
-qqline(HousePrices$GarageArea[HousePrices$GarageArea != 0])
-```
-
-La distribuzione dell'area del garage ha più mode, le mode probabilmente corrispondono con la capienza in numero di auto per cui il garage è stato costruito.
-
-```{r}
-sum(HousePrices$WoodDeckSF == 0, na.rm = T)
-summary(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0])
-boxplot(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0])
-hist(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0], freq = F)
-plot(density(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0], na.rm = T))
-qqnorm(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0])
-qqline(HousePrices$WoodDeckSF[HousePrices$WoodDeckSF != 0])
-```
-
-```{r}
-sum(HousePrices$OpenPorchSF == 0, na.rm = T)
-summary(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0])
-boxplot(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0])
-hist(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0], freq = F)
-plot(density(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0], na.rm = T))
-qqnorm(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0])
-qqline(HousePrices$OpenPorchSF[HousePrices$OpenPorchSF != 0])
-```
-
-```{r}
-sum(HousePrices$EnclosedPorch == 0, na.rm = T)
-summary(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0])
-boxplot(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0])
-hist(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0], freq = F)
-plot(density(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0], na.rm = T))
-qqnorm(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0])
-qqline(HousePrices$EnclosedPorch[HousePrices$EnclosedPorch != 0])
-```
-
-```{r}
-sum(HousePrices$X3SsnPorch == 0, na.rm = T)
-summary(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0])
-boxplot(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0])
-hist(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0], freq = F)
-plot(density(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0], na.rm = T))
-qqnorm(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0])
-qqline(HousePrices$X3SsnPorch[HousePrices$X3SsnPorch != 0])
-```
-
-```{r}
-sum(HousePrices$ScreenPorch == 0, na.rm = T)
-summary(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0])
-boxplot(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0])
-hist(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0], freq = F)
-plot(density(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0], na.rm = T))
-qqnorm(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0])
-qqline(HousePrices$ScreenPorch[HousePrices$ScreenPorch != 0])
-```
-
-```{r}
-sum(HousePrices$PoolArea == 0, na.rm = T)
-summary(HousePrices$PoolArea[HousePrices$PoolArea != 0])
-boxplot(HousePrices$PoolArea[HousePrices$PoolArea != 0])
-hist(HousePrices$PoolArea[HousePrices$PoolArea != 0], freq = F)
-plot(density(HousePrices$PoolArea[HousePrices$PoolArea != 0], na.rm = T))
-qqnorm(HousePrices$PoolArea[HousePrices$PoolArea != 0])
-qqline(HousePrices$PoolArea[HousePrices$PoolArea != 0])
-```
-
-Ci sono solo 7 piscine, troppo pochi valori.
-
-```{r}
-sum(HousePrices$MiscVal == 0, na.rm = T)
-summary(HousePrices$MiscVal[HousePrices$MiscVal != 0])
-boxplot(HousePrices$MiscVal[HousePrices$MiscVal != 0])
-hist(HousePrices$MiscVal[HousePrices$MiscVal != 0], freq = F)
-plot(density(HousePrices$MiscVal[HousePrices$MiscVal != 0], na.rm = T))
-qqnorm(HousePrices$MiscVal[HousePrices$MiscVal != 0])
-qqline(HousePrices$MiscVal[HousePrices$MiscVal != 0])
-```
-
-Non analizzo la variabile MiscVal in quanto le dimesioni di diverse caratteristiche della casa non sono comparabili (non posso comparare la grandezza di un campo da tennis con la grandezza di un ascensore)
-
-```{r}
-summary(HousePrices$MoSold)
-hist(HousePrices$MoSold, freq = F)
-```
-
-Vengono vendute più case nei mesi primaverili ed estivi rispetto alle stagioni autunnali e invernali
-
-```{r}
-summary(HousePrices$YrSold)
-barplot(table(HousePrices$YrSold))
-```
-
-Si evidenzia una descrescita nelle vendite nel 2010, forse dovuta al termine delle osservazioni nel dataset
-
-```{r}
-summary(HousePrices$SalePrice)
-boxplot(HousePrices$SalePrice)
-hist(HousePrices$SalePrice, freq = F)
-plot(density(HousePrices$SalePrice, na.rm = T))
-qqnorm(HousePrices$SalePrice)
-qqline(HousePrices$SalePrice)
-```
-
-I prezzi di vendità delle case sono nel range tra 34900 e 755000 con una media di circa 181000. La distribuzione è asimmetrica: non ci sono molte case a prezzi bassi, ce ne sono molte invece che superano il terzo quartile.
-
 
 ## ANALISI BIVARIATA DEL DATASET "House prices"
 # CONSIDERANDO LA VARIABILE TARGET(SalePrice):
@@ -643,7 +333,7 @@ correlation
 # abbastanza forte relazione tra le due variabili
 # all'aumentare della variabile x aumenta anche la variabile y(target)
 
-### Bivariata
+## Bivariata
 
 ```{r}
 boxplot(log(HousePrices$SalePrice)~HousePrices$LotShape)
