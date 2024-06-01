@@ -264,19 +264,15 @@ summary(HousePrices$SalePrice)
 str(HousePrices$MSSubClass) # ogni numero e' specifico per una solo tipologia
 
 # se vogliamo vedere come essa influenza il prezzo vendita
-# dato che ho due variabili numeriche faccio il grafico a dispersione:
-plot(HousePrices$MSSubClass, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "MSSubClass",
-     ylab = "Prezzo(target)")
+#trattando MSSubClass come una variabile categorica:
+boxplot(SalePrice ~ MSSubClass, data = HousePrices, 
+        main = "Boxplot di SalePrice per ciascun tipo di abitazione",
+        xlab = "Categoria", ylab = "Prezzo(target)", col = c("grey", "lightblue"))
 
-# vediamo la tipologia di abitazione con il prezzo massimo minore e' quella 45
-# quella invece con il prezzo minimo minore e' la 20
 # le proprieta' che raggiungono i prezzi piu' alti sono quelle della categoria 60
-
-# Calcolo la correlazione
-correlation <- cor(HousePrices$MSSubClass, HousePrices$SalePrice, method="pearson")
-correlation
-# notiamo un valore di correlazione vicino a 0 il quale indica una debole relazione lineare tra le due variabili.
-# abbiamo(anche se di poco) un valore negativo che ci dice se una variabile aumenta, l'altra tende a diminuire.
+# la mediana tende a non essere al centro
+# ci sono outliers
+# la varianza per certe categorie e' piu' grande per altre meno
 
 
 # GarageType
