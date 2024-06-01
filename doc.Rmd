@@ -167,6 +167,9 @@ round(prop.table(table(BankChurners$Marital_Status)), digits = 3)
 BankChurners$Income_Category <- factor(BankChurners$Income_Category)
 summary(BankChurners$Income_Category)
 str(BankChurners$Income_Category)
+levels(BankChurners$Income_Category) <- c("120K+", "$40K - $60K", "$60K - $80K", "$80K - $120K",  "Less than $40K", "Unknown")
+BankChurners$Income_Category <- factor(BankChurners$Income_Category, levels = c("Less than $40K", "$40K - $60K", "$60K - $80K", "$80K - $120K", "120K+", "Unknown"))
+barplot(table(BankChurners$Income_Category), main= "Grafico a barre", xlab="Categoria", ylab="Frequenza")
 
 # frequenze:
 table(BankChurners$Income_Category) # stesso output di summary
