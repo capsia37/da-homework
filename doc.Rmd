@@ -413,11 +413,14 @@ bivarAnalysis <- function(conf, df) {
     print(kable(summary(lm_obj)$coefficients, row.names = FALSE))
     if (as.logical(conf["dorsq"])) {
       print(kable(cbind(
-        cov = cov(df[, conf["colname"]], log(df[, conf["tgcol"]])),
-        cor = cor(df[, conf["colname"]], log(df[, conf["tgcol"]])),
+        cov = cov(df[, conf["colname"]], log(df[, conf["tgcol"]]), use = "complete.obs"),
+        cor = cor(df[, conf["colname"]], log(df[, conf["tgcol"]]), use = "complete.obs"),
         rsq = summary(lm_obj)$r.squared
       )))
     }
+  }
+  if (!is.na(conf["desc"])) {
+    cat("\n\n", conf["desc"], "\n")
   }
 }
 
