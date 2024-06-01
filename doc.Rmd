@@ -83,7 +83,8 @@ legend("topright", legend = paste("Media =", media_credito),
        col = "red", lwd = 2, bty = "n")
 
 # notiamo che il grafico e' piu' popolato ovvero ci sono piu' clienti al di sotto della media
-# sono piu' numerosi i clienti con credito limite massimo (34k) che i clienti nei vari intervalli tra 10k e 33k
+# sono piu' numerosi i clienti con credito limite massimo (34k) che i clienti nei vari
+# intervalli tra 10k e 33k
 
 # Avg_Open_To_Buy
 summary(BankChurners$Avg_Open_To_Buy)
@@ -92,13 +93,16 @@ hist(BankChurners$Avg_Open_To_Buy, main = "Istogramma", xlab = "Media Compera", 
 # notiamo che i valori massimi sono esattamente il credito limite dei clienti
 # il grafico segue un andamento esponenziale verso il basso
 # e' molto simile al grafico visto in precedenza riguardante il credito limite
-# quindi da questi grafici si nota come praticamenti tutti i clienti raggiungano o quasi il credito limite
+# quindi da questi grafici si nota come praticamenti tutti i clienti raggiungano 
+# o quasi il credito limite
 
 #Month_On_Book
-summary(BankChurners$Months_on_book) #il tempo minimo trascorso con la banca e' di 13 mesi invece il
+summary(BankChurners$Months_on_book) 
+#il tempo minimo trascorso con la banca e' di 13 mesi invece il
 # maggior tempo trascorso e' di 56 mesi
 # vedendolo graficamente:
-hist(BankChurners$Months_on_book, main = "Istogramma mesi trascorsi", xlab = "Mesi", ylab = "Frequenza")
+hist(BankChurners$Months_on_book, main = "Istogramma mesi trascorsi", 
+     xlab = "Mesi", ylab = "Frequenza")
 media_mesi <- mean(BankChurners$Months_on_book)
 abline(v= media_mesi, col = "blue", lwd = 3)
 legend("topright", legend = paste("Media =", round(media_mesi, digits = 0)), 
@@ -113,8 +117,8 @@ summary(BankChurners$Total_Trans_Amt) # transazioni minime e massime negli ultim
 # la massima e' di 18k dollari
 
 # grafico:
-hist(BankChurners$Total_Trans_Amt, main = "Istogramma delle transazioni per 12 mesi", xlab = "Mesi",
-     ylab = "Frequenza")
+hist(BankChurners$Total_Trans_Amt, main = "Istogramma delle transazioni per 12 mesi", 
+     xlab = "Mesi", ylab = "Frequenza")
 
 # si nota che la maggioranza si tiene sotto i 5k dollari di spesa
 # aggiungendo la media:
@@ -123,7 +127,8 @@ abline(v= media_transazioni, col = "orange", lwd = 3)
 legend("topright", legend = paste("Media =", round(media_transazioni, digits = 0)), 
        col = "orange", lwd = 2, bty = "n")
 
-# come detto poco fa una volta superata la media delle transazioni la frequenza delle persone si abbassa
+# come detto poco fa una volta superata la media delle transazioni 
+# la frequenza delle persone si abbassa
 ```
 
 ### PER LE VARIABILI DI TIPO CATEGORIALE(factor)
@@ -140,15 +145,16 @@ table(BankChurners$Gender)
 prop.table(table(BankChurners$Gender))
 
 # Grafico a barre
-barplot(table(BankChurners$Gender), main="Grafico a barre variabile sesso", xlab="Categoria", ylab="Frequenza")
+barplot(table(BankChurners$Gender), main="Grafico a barre variabile sesso", 
+        xlab="Categoria", ylab="Frequenza")
 
 
 # Education_Level
 BankChurners$Education_Level <- factor(BankChurners$Education_Level) # conversione in fattore
 summary(BankChurners$Education_Level)
 str(BankChurners$Education_Level)
-barplot(table(BankChurners$Education_Level), main = "Grafico a barre livello educazione", xlab = "Educazione",
-        ylab = "Frequenza")
+barplot(table(BankChurners$Education_Level), main = "Grafico a barre livello educazione", 
+        xlab = "Educazione", ylab = "Frequenza")
 
 
 #Marital_Status
@@ -156,7 +162,8 @@ BankChurners$Marital_Status <- factor(BankChurners$Marital_Status)
 str(BankChurners$Marital_Status) # ho 4 livelli(divorziato, sposato, single e stato sconosciuto)
 summary(BankChurners$Marital_Status)
 
-barplot(table(BankChurners$Marital_Status), main= "Grafico a barre", xlab="Categoria", ylab="Frequenza")
+barplot(table(BankChurners$Marital_Status), main= "Grafico a barre", xlab="Categoria", 
+        ylab="Frequenza")
 # la maggioranza delle persone e' sposata oppure single
 # distribuendo gli stati sconosciuti il risultato sarebbe sempre lo stesso
 
@@ -169,9 +176,13 @@ round(prop.table(table(BankChurners$Marital_Status)), digits = 3)
 BankChurners$Income_Category <- factor(BankChurners$Income_Category)
 summary(BankChurners$Income_Category)
 str(BankChurners$Income_Category)
-levels(BankChurners$Income_Category) <- c("120K+", "$40K - $60K", "$60K - $80K", "$80K - $120K",  "Less than $40K", "Unknown")
-BankChurners$Income_Category <- factor(BankChurners$Income_Category, levels = c("Less than $40K", "$40K - $60K", "$60K - $80K", "$80K - $120K", "120K+", "Unknown"))
-barplot(table(BankChurners$Income_Category), main= "Grafico a barre", xlab="Categoria", ylab="Frequenza")
+levels(BankChurners$Income_Category) <- 
+  c("120K+", "$40K - $60K", "$60K - $80K", "$80K - $120K",  "Less than $40K", "Unknown")
+BankChurners$Income_Category <- factor(
+  BankChurners$Income_Category, 
+  levels = c("Less than $40K", "$40K - $60K", "$60K - $80K", "$80K - $120K", "120K+", "Unknown"))
+barplot(table(BankChurners$Income_Category), main= "Grafico a barre", 
+        xlab="Categoria", ylab="Frequenza")
 
 # frequenze:
 table(BankChurners$Income_Category) # stesso output di summary
@@ -182,8 +193,8 @@ BankChurners$Card_Category <- factor(BankChurners$Card_Category)
 str(BankChurners$Card_Category)
 summary(BankChurners$Card_Category)
 
-barplot(table(BankChurners$Card_Category), main = "Grafico per la categoria delle carte", xlab = "Tipo di carta", 
-     ylab = "Frequenza")
+barplot(table(BankChurners$Card_Category), main = "Grafico per la categoria delle carte", 
+        xlab = "Tipo di carta", ylab = "Frequenza")
 # notiamo che la carta di credito di tipo Blue e' nettamente la piu' presente
 ```
 
@@ -291,12 +302,14 @@ boxplot(SalePrice ~ GarageType, data = HousePrices,
 # la distribuzione e' assimetrica per quanto riguarda Attchd, Basment, BuiltIn e CarPort
 # invece risulta simmetrica per 2Types e Detchd
 # la varianza piu' alta si trova nella categoria BuiltIn
-# ci sono molti outliers e questo va ad indicare una distribuzione con code lunghe o la presenza di valori anomali.
+# ci sono molti outliers e questo va ad indicare una distribuzione con code lunghe 
+# o la presenza di valori anomali.
 
 # la media dei prezzi di vendita per ciascun tipo di garage
 media_prezzi <- tapply(HousePrices$SalePrice, HousePrices$GarageType, mean)
 # il grafico a barre:
-boxplot(HousePrices$SalePrice~HousePrices$GarageType, main = "Media dei Prezzi per Tipo di Garage", xlab = "Tipo di Garage", 
+boxplot(HousePrices$SalePrice~HousePrices$GarageType, 
+        main = "Media dei Prezzi per Tipo di Garage", xlab = "Tipo di Garage", 
         ylab = "Media Prezzo (target)", col = "red")
 # il prezzo medio piu' alto e' quello della categoriala BuiltIn
 
@@ -306,8 +319,8 @@ boxplot(HousePrices$SalePrice~HousePrices$GarageType, main = "Media dei Prezzi p
 str(HousePrices$PoolArea)
 summary(HousePrices$PoolArea) # poche proprieta' hanno la piscina
 
-plot(HousePrices$PoolArea, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "Piedi quadri",
-     ylab = "Prezzo(target)")
+plot(HousePrices$PoolArea, HousePrices$SalePrice, main = "Grafico a dispersione", 
+     xlab = "Piedi quadri", ylab = "Prezzo(target)")
 # solo una proprieta' con la piscina ha un prezzo molto elevato
 
 # inoltre se aggiungiamo la retta della media dei prezzi:
@@ -327,8 +340,8 @@ correlation
 str(HousePrices$GarageCars)
 summary(HousePrices$GarageCars) # varia da 0(niente garage) a 4
 
-plot(HousePrices$GarageCars, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "Capienza",
-     ylab = "Prezzo(target)")
+plot(HousePrices$GarageCars, HousePrices$SalePrice, main = "Grafico a dispersione", 
+     xlab = "Capienza", ylab = "Prezzo(target)")
 # le proprieta' con la capienza di 3 posti auto sono quelle piu' costose(non tutte ovviamente)
 # ci sono nettamente meno dati per le case con 4 posti
 
@@ -341,7 +354,8 @@ correlation
 ### VARIABILI QUANTITATIVE
 ```{r}
 
-QuantVars = HousePrices[, c("SalePrice", "OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")]
+QuantVars = HousePrices[, c("SalePrice", "OverallQual", "GrLivArea", 
+                            "GarageCars", "GarageArea", "TotalBsmtSF")]
 # Correlazione tra le variabili
 cor(QuantVars)
 
@@ -390,24 +404,28 @@ bivarAnalysis <- function(conf, df) {
     df <- df[df[, conf["colname"]] != 0,]
   }
   if (as.logical(conf["docmpboxplot"])) {
-    boxplot(log(df[, conf["tgcol"]])~df[, conf["colname"]], xlab = conf["colname"], ylab = conf["tgcol"])
+    boxplot(log(df[, conf["tgcol"]])~df[, conf["colname"]], 
+            xlab = conf["colname"], ylab = conf["tgcol"])
   }
   if (as.logical(conf["doanova"])) {
     anova_obj <- aov(log(df[, conf["tgcol"]])~df[, conf["colname"]])
     print(kable(summary(anova_obj)[1][[1]], row.names = FALSE))
     if (as.logical(conf["doetasq"])) {
-      etasq_obj <- summary(anova_obj)[1][[1]][[2]][1]/(summary(anova_obj)[1][[1]][[2]][2]+summary(anova_obj)[1][[1]][[2]][1])
+      etasq_obj <- summary(anova_obj)[1][[1]][[2]][1]/(summary(anova_obj)[1][[1]][[2]][2]+
+                                                         summary(anova_obj)[1][[1]][[2]][1])
       cat("\n\n Eta squared: ", etasq_obj, "\n\n")
     }
   }
   if (as.logical(conf["doscatterplot"])) {
-    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], ylab = conf["tgcol"])
+    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], 
+         ylab = conf["tgcol"])
     lm_obj <- lm(log(df[, conf["tgcol"]])~df[, conf["colname"]])
     abline(a= lm_obj$coefficients[1], b = lm_obj$coefficients[2], col=2)
   }
 
   if (as.logical(conf["doscatterplot"])) {
-    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], ylab = conf["tgcol"])
+    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], 
+         ylab = conf["tgcol"])
     lm_obj <- lm(log(df[, conf["tgcol"]])~df[, conf["colname"]])
     abline(a= lm_obj$coefficients[1], b = lm_obj$coefficients[2], col=2)
     print(kable(summary(lm_obj)$coefficients, row.names = FALSE))
