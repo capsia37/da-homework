@@ -338,7 +338,40 @@ correlation
 # all'aumentare della variabile x aumenta anche la variabile y(target)
 ```
 
-## Bivariata
+### VARIABILI QUANTITATIVE
+```{r}
+
+QuantVars = HousePrices[, c("SalePrice", "OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")]
+# Correlazione tra le variabili
+cor(QuantVars)
+
+#Scatterplot
+par(mfrow=c(2,3))
+plot(HousePrices$OverallQual, HousePrices$SalePrice, main="OverallQual vs SalePrice", pch=19)
+plot(HousePrices$TotalBsmtSF, HousePrices$SalePrice, main="TotalBsmtSF vs SalePrice", pch=19)
+plot(HousePrices$GrLivArea, HousePrices$SalePrice, main="GrLivArea vs SalePrice", pch=19)
+plot(HousePrices$GarageCars, HousePrices$SalePrice, main="GarageCars vs SalePrice", pch=19)
+plot(HousePrices$GarageArea, HousePrices$SalePrice, main="GarageArea vs SalePrice", pch=19)
+
+#Calcolo covarianza e correlazione
+CovCorr = function(x, y) {
+  n = length(y)
+  Covarianza = sum((x-mean(x))*(y-mean(y))) / (n-1)
+  Correlazione = Covarianza / (sqrt(var(x)*var(y)))
+  return(list(Covarianza=Covarianza, Correlazione=Correlazione))
+}
+
+#Calcolo delle covarianze e correlazioni
+Quantitative = c("OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")
+for (quant in Quantitative) {
+  cat("Analisi per", quant, "\n")
+  result = CovCorr(HousePrices[[quant]], HousePrices$SalePrice)
+  cat("Covarianza tra", quant, "e SalePrice:", result$Covarianza, "\n")
+  cat("Coefficiente di correlazione tra", quant, "e SalePrice:", result$Correlazione, "\n\n")
+}
+```
+ 
+## Bivariata (tutte le variabili)
 
 ```{r}
 HousePricesBivConf <- read.csv("houseprices-biv.config.csv")
@@ -390,36 +423,3 @@ bivarAnalysis <- function(conf, df) {
 
 out <- apply(HousePricesBivConf, 1, bivarAnalysis, df = HousePrices)
 ```
-
-```{r}
-#VARIABILI QUANTITATIVE
-
-QuantVars = HousePrices[, c("SalePrice", "OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")]
-# Correlazione tra le variabili
-cor(QuantVars)
-
-#Scatterplot
-par(mfrow=c(2,3))
-plot(HousePrices$OverallQual, HousePrices$SalePrice, main="OverallQual vs SalePrice", pch=19)
-plot(HousePrices$TotalBsmtSF, HousePrices$SalePrice, main="TotalBsmtSF vs SalePrice", pch=19)
-plot(HousePrices$GrLivArea, HousePrices$SalePrice, main="GrLivArea vs SalePrice", pch=19)
-plot(HousePrices$GarageCars, HousePrices$SalePrice, main="GarageCars vs SalePrice", pch=19)
-plot(HousePrices$GarageArea, HousePrices$SalePrice, main="GarageArea vs SalePrice", pch=19)
-
-#Calcolo covarianza e correlazione
-CovCorr = function(x, y) {
-  n = length(y)
-  Covarianza = sum((x-mean(x))*(y-mean(y))) / (n-1)
-  Correlazione = Covarianza / (sqrt(var(x)*var(y)))
-  return(list(Covarianza=Covarianza, Correlazione=Correlazione))
-}
-
-#Calcolo delle covarianze e correlazioni
-Quantitative = c("OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")
-for (quant in Quantitative) {
-  cat("Analisi per", quant, "\n")
-  result = CovCorr(HousePrices[[quant]], HousePrices$SalePrice)
-  cat("Covarianza tra", quant, "e SalePrice:", result$Covarianza, "\n")
-  cat("Coefficiente di correlazione tra", quant, "e SalePrice:", result$Correlazione, "\n\n")
-}
- ```
