@@ -552,7 +552,7 @@ qqline(HousePrices$SalePrice)
 
 I prezzi di vendità delle case sono nel range tra 34900 e 755000 con una media di circa 181000. La distribuzione è asimmetrica: non ci sono molte case a prezzi bassi, ce ne sono molte invece che superano il terzo quartile.
 
-### Multivariata
+### Bivariata
 
 ```{r}
 boxplot(log(HousePrices$SalePrice)~HousePrices$LotShape)
