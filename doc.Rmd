@@ -244,23 +244,25 @@ out <- apply(HousePricesUnivConf, 1, univarAnalysis, df = HousePrices)
 ```
 
 ## ANALISI BIVARIATA DEL DATASET "House prices"
+
+```{r}
 # CONSIDERANDO LA VARIABILE TARGET(SalePrice):
-Train$SalePrice # prendiamo come variabile target il prezzo della proprieta' in vendita
-str(Train$SalePrice) 
+HousePrices$SalePrice # prendiamo come variabile target il prezzo della proprieta' in vendita
+str(HousePrices$SalePrice) 
 
 # analizziamo la variabile:
-summary(Train$SalePrice)
+summary(HousePrices$SalePrice)
 # il prezzo delle proprieta' varia dai 34k ai 755k dollari
 # il prezzo medio e' di 180k dollari
 
 
 # MSSubClass
 # questa variabile identifica la tipologia di abitazione
-str(Train$MSSubClass) # ogni numero e' specifico per una solo tipologia
+str(HousePrices$MSSubClass) # ogni numero e' specifico per una solo tipologia
 
 # se vogliamo vedere come essa influenza il prezzo vendita
 # dato che ho due variabili numeriche faccio il grafico a dispersione:
-plot(Train$MSSubClass, Train$SalePrice, main = "Grafico a dispersione", xlab = "MSSubClass",
+plot(HousePrices$MSSubClass, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "MSSubClass",
      ylab = "Prezzo(target)")
 
 # vediamo la tipologia di abitazione con il prezzo massimo minore e' quella 45
@@ -268,7 +270,7 @@ plot(Train$MSSubClass, Train$SalePrice, main = "Grafico a dispersione", xlab = "
 # le proprieta' che raggiungono i prezzi piu' alti sono quelle della categoria 60
 
 # Calcolo la correlazione
-correlation <- cor(Train$MSSubClass, Train$SalePrice, method="pearson")
+correlation <- cor(HousePrices$MSSubClass, HousePrices$SalePrice, method="pearson")
 correlation
 # notiamo un valore di correlazione vicino a 0 il quale indica una debole relazione lineare tra le due variabili.
 # abbiamo(anche se di poco) un valore negativo che ci dice se una variabile aumenta, l'altra tende a diminuire.
@@ -276,12 +278,12 @@ correlation
 
 # GarageType
 # variabile categorica che indica dove si trova il garage
-str(Train$GarageType)
-Train$GarageType <- factor(Train$GarageType)
-summary(Train$GarageType) # noto che ci sono degli NA's
+str(HousePrices$GarageType)
+HousePrices$GarageType <- factor(HousePrices$GarageType)
+summary(HousePrices$GarageType) # noto che ci sono degli NA's
 
 # graficamente:
-boxplot(SalePrice ~ GarageType, data = Train, 
+boxplot(SalePrice ~ GarageType, data = HousePrices, 
         main = "Boxplot di SalePrice per ciascun livello di GarageType",
         xlab = "GarageType", ylab = "Prezzo(target)", col = c("lightblue", "lightgreen"))
 # la distribuzione e' assimetrica per quanto riguarda Attchd, Basment, BuiltIn e CarPort
@@ -290,48 +292,49 @@ boxplot(SalePrice ~ GarageType, data = Train,
 # ci sono molti outliers e questo va ad indicare una distribuzione con code lunghe o la presenza di valori anomali.
 
 # la media dei prezzi di vendita per ciascun tipo di garage
-media_prezzi <- tapply(Train$SalePrice, Train$GarageType, mean)
+media_prezzi <- tapply(HousePrices$SalePrice, HousePrices$GarageType, mean)
 # il grafico a barre:
-barplot(Train, main = "Media dei Prezzi per Tipo di Garage", xlab = "Tipo di Garage", 
+boxplot(HousePrices$SalePrice~HousePrices$GarageType, main = "Media dei Prezzi per Tipo di Garage", xlab = "Tipo di Garage", 
         ylab = "Media Prezzo (target)", col = "red")
 # il prezzo medio piu' alto e' quello della categoriala BuiltIn
 
 
 # PoolArea
 # variabile che indica quanti piedi quadri ha la piscina
-str(Train$PoolArea)
-summary(Train$PoolArea) # poche proprieta' hanno la piscina
+str(HousePrices$PoolArea)
+summary(HousePrices$PoolArea) # poche proprieta' hanno la piscina
 
-plot(Train$PoolArea, Train$SalePrice, main = "Grafico a dispersione", xlab = "Piedi quadri",
+plot(HousePrices$PoolArea, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "Piedi quadri",
      ylab = "Prezzo(target)")
 # solo una proprieta' con la piscina ha un prezzo molto elevato
 
 # inoltre se aggiungiamo la retta della media dei prezzi:
-media_prezzi_case <- mean(Train$SalePrice) # che e' 180k
+media_prezzi_case <- mean(HousePrices$SalePrice) # che e' 180k
 abline(h = media_prezzi_case, col = "red", lwd = 2)
 
 # notiamo che le altre proprieta' con la piscina hanno tutte prezzi vicini alla media
 
 # Calcolo la correlazione
-correlation <- cor(Train$PoolArea, Train$SalePrice, method="pearson")
+correlation <- cor(HousePrices$PoolArea, HousePrices$SalePrice, method="pearson")
 correlation
 # debole relazione lineare tra le due variabili.
 
 
 # GarageCars
 # variabile numerica che indica la capienza del garage per le automobili
-str(Train$GarageCars)
-summary(Train$GarageCars) # varia da 0(niente garage) a 4
+str(HousePrices$GarageCars)
+summary(HousePrices$GarageCars) # varia da 0(niente garage) a 4
 
-plot(Train$GarageCars, Train$SalePrice, main = "Grafico a dispersione", xlab = "Capienza",
+plot(HousePrices$GarageCars, HousePrices$SalePrice, main = "Grafico a dispersione", xlab = "Capienza",
      ylab = "Prezzo(target)")
 # le proprieta' con la capienza di 3 posti auto sono quelle piu' costose(non tutte ovviamente)
 # ci sono nettamente meno dati per le case con 4 posti
 
-correlation <- cor(Train$GarageCars, Train$SalePrice, method="pearson")
+correlation <- cor(HousePrices$GarageCars, HousePrices$SalePrice, method="pearson")
 correlation
 # abbastanza forte relazione tra le due variabili
 # all'aumentare della variabile x aumenta anche la variabile y(target)
+```
 
 ## Bivariata
 
