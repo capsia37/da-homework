@@ -1,6 +1,8 @@
 ---
 title: "Homework DA"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 date: "`r Sys.Date()`"
 ---
 
@@ -193,6 +195,7 @@ HousePricesUnivConf <- read.csv("houseprices-univ.config.csv")
 
 ```{r, results='asis'}
 univarAnalysis <- function(conf, df) {
+  cat("\n\n\\clearpage\n\\newpage")
   cat("\n\n##", conf["colname"], "\n")
   if (as.logical(conf["uselog"])) {
     df[, conf["colname"]] <- log(df[, conf["colname"]])
@@ -335,76 +338,8 @@ correlation
 # all'aumentare della variabile x aumenta anche la variabile y(target)
 ```
 
-## Bivariata
-
+### VARIABILI QUANTITATIVE
 ```{r}
-boxplot(log(HousePrices$SalePrice)~HousePrices$LotShape)
-table(HousePrices$LotShape)
-```
-
-prezzo <-subset(data,select = c( credit limit,MSSubClass,BsmtFullBath,BsmtHalfBath 
-                                fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars))
-
-
-
-
-prezzo$"creditlimit" <- as.numeric(prezzo$"creditlimit")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
- prezzo$"MSSubClass" <- factor(prezzo$"creditlimit")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza") 
-prezzo$"BsmtFullBath" <- as.numeric(prezzo$"BsmtFullBath")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"BsmtHalfBath" <- as.numeric(prezzo$"BsmtHalfBath")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"HalfBath" <- as.numeric(prezzo$"HalfBath")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"BedroomAbvGr" <- as.numeric(prezzo$"BedroomAbvGr")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"KitchenAbvGr" <- as.numeric(prezzo$"KitchenAbvGr")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"Fireplaces" <- as.numeric(prezzo$"Fireplaces")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"GarageCars" <- as.numeric(prezzo$"GarageCars")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-prezzo$"fullBath" <- as.numeric(prezzo$" fullBath")
-                              levels= c(1,2,3)
-                              labels= c("abbastanza","non abbastanza")
-#Prova de Anova
-Variable_limitate <-subset(Data, select = creditlimit,MSSubClass,BsmtFullBath,BsmtHalfBath,fullBath,HalfBath,BedroomAbvGr,KitchenAbvGr,Fireplaces,GarageCars)
-
-prezzo$Housemeters <- rnorm(4986,mean=828,sd=708)
-Housemeters <- prezzo$Housemeters
-#variable description
-tapply(prezzo$housemeters, Houseprice$Saleprice, summary)
-
-#separazione della variabile ordinaria
-prezzo <- prezzo[!is.na(Houseprices$Salesprices),]
-Housemeters <-as.factor(Houseprices$Salesprices)
-#Retta di Regresione
-p <- c(1)
-h <- c(2)
-DATA <- data.frame(p, h)
-model <- lm(h ~ p, data = DATA)
-
-#Argomento
-plot(p, h, main= "House prices", plab= "p", hlab = "h")
-abline(a= acoefficients[1], b = acoefficients[2])
-pp.test(Houseprices$salesprices, mu= 4986, sigma.a= 4776)
-
-test_pp <- pp.test(Houseprices$salesprices, mu=4996, sigma.a=4776)
-
-
-
-#VARIABILI QUANTITATIVE
 
 QuantVars = HousePrices[, c("SalePrice", "OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF")]
 # Correlazione tra le variabili
@@ -434,4 +369,57 @@ for (quant in Quantitative) {
   cat("Covarianza tra", quant, "e SalePrice:", result$Covarianza, "\n")
   cat("Coefficiente di correlazione tra", quant, "e SalePrice:", result$Correlazione, "\n\n")
 }
+```
  
+## Bivariata (tutte le variabili)
+
+```{r}
+HousePricesBivConf <- read.csv("houseprices-biv.config.csv")
+```
+
+```{r, results='asis'}
+bivarAnalysis <- function(conf, df) {
+  cat("\\newpage")
+  cat("\n\n##", conf["colname"], "\n")
+  if (as.logical(conf["uselog"])) {
+    df[, conf["colname"]] <- log(df[, conf["colname"]])
+  }
+  cat("\n\n Numero di NA: ", sum(is.na(df[, conf["colname"]]), na.rm = T), "\n\n")
+  if (as.logical(conf["filterzeros"])) {
+    cat("\n\n Numero di zeri rimossi: ", sum(df[, conf["colname"]] == 0, na.rm = T), "\n\n")
+    df <- df[df[, conf["colname"]] != 0,]
+  }
+  if (as.logical(conf["docmpboxplot"])) {
+    boxplot(log(df[, conf["tgcol"]])~df[, conf["colname"]], xlab = conf["colname"], ylab = conf["tgcol"])
+  }
+  if (as.logical(conf["doanova"])) {
+    anova_obj <- aov(log(df[, conf["tgcol"]])~df[, conf["colname"]])
+    print(kable(summary(anova_obj)[1][[1]], row.names = FALSE))
+    if (as.logical(conf["doetasq"])) {
+      etasq_obj <- summary(anova_obj)[1][[1]][[2]][1]/(summary(anova_obj)[1][[1]][[2]][2]+summary(anova_obj)[1][[1]][[2]][1])
+      cat("\n\n Eta squared: ", etasq_obj, "\n\n")
+    }
+  }
+  if (as.logical(conf["doscatterplot"])) {
+    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], ylab = conf["tgcol"])
+    lm_obj <- lm(log(df[, conf["tgcol"]])~df[, conf["colname"]])
+    abline(a= lm_obj$coefficients[1], b = lm_obj$coefficients[2], col=2)
+  }
+
+  if (as.logical(conf["doscatterplot"])) {
+    plot(df[, conf["colname"]], log(df[, conf["tgcol"]]), xlab = conf["colname"], ylab = conf["tgcol"])
+    lm_obj <- lm(log(df[, conf["tgcol"]])~df[, conf["colname"]])
+    abline(a= lm_obj$coefficients[1], b = lm_obj$coefficients[2], col=2)
+    print(kable(summary(lm_obj)$coefficients, row.names = FALSE))
+    if (as.logical(conf["dorsq"])) {
+      print(kable(cbind(
+        cov = cov(df[, conf["colname"]], log(df[, conf["tgcol"]])),
+        cor = cor(df[, conf["colname"]], log(df[, conf["tgcol"]])),
+        rsq = summary(lm_obj)$r.squared
+      )))
+    }
+  }
+}
+
+out <- apply(HousePricesBivConf, 1, bivarAnalysis, df = HousePrices)
+```
