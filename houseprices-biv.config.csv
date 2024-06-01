@@ -15,7 +15,7 @@
 "Condition2","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "BldgType","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "HouseStyle","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
-"OverallQual","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
+"OverallQual","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,"Nel grafico si può notare una relazione positiva tra la qualità complessiva e il prezzo di vendita, questo è confermato dalla covarianza, che è positiva e dall'alto valore del coefficiente di correlazione (0.79). All'aumentare della qualità complessiva, il prezzo di vendita tende ad aumentare"
 "OverallCond","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "YearBuilt","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
 "YearRemodAdd","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
@@ -36,7 +36,7 @@
 "BsmtFinType2","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "BsmtFinSF2","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
 "BsmtUnfSF","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
-"TotalBsmtSF","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
+"TotalBsmtSF","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,"Nel grafico si può notare una relazione positiva tra la superficie totale del seminterrato e il prezzo di vendita. La covarianza è positiva e il coefficiente di correlazione abbastanza alto (0.61). Quindi, le case con i seminterrati più grandi tendono ad avere un prezzo di vendita maggiore"
 "Heating","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "HeatingQC","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "CentralAir","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
@@ -44,7 +44,7 @@
 "X1stFlrSF","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
 "X2ndFlrSF","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
 "LowQualFinSF","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
-"GrLivArea","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
+"GrLivArea","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,"Dal grafico si può vedere che c'è una forte relazione positiva tra l'area abitabile sopra il suolo e il prezzo di vendita, la covarianza è positiva e il coefficiente di correlazione è alto (0.71), indicando una forte correlazione positiva. Case con maggiore area abitabile tendono ad avere prezzi di vendita più elevati"
 "BsmtFullBath","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "BsmtHalfBath","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "FullBath","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
@@ -59,8 +59,8 @@
 "GarageType","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "GarageYrBlt","SalePrice",FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
 "GarageFinish","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
-"GarageCars","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
-"GarageArea","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,NA
+"GarageCars","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,"Nel grafico si nota una relazione positiva tra il numero di auto che il garage può contenere e il prezzo di vendita. La covarianza è positiva e il coefficiente di correlazione alto (0.64). Quindi, il numero di posti auto nel garage è un fattore significativo nel determinare il prezzo di vendita"
+"GarageArea","SalePrice",TRUE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,"Il grafico mostra una relazione positiva tra l'area del garage e il prezzo di vendita. La covarianza è positiva e il coefficiente di correlazione è moderatamente alto (0.62). Le case con garage più grandi tendono ad avere prezzi di vendita più alti"
 "GarageQual","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "GarageCond","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
 "PavedDrive","SalePrice",FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,NA
