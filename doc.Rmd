@@ -615,6 +615,9 @@ model <- lm(h ~ p, data = DATA)
 #Argomento
 plot(p, h, main= "House prices", plab= "p", hlab = "h")
 abline(a= acoefficients[1], b = acoefficients[2])
+pp.test(Houseprices$salesprices, mu= 4986, sigma.a= 4776)
+
+test_pp <- pp.test(Houseprices$salesprices, mu=4996, sigma.a=4776)
 
 
 
